@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { tracks } from '../data/tracks'
+import { tracks, trackGroups } from '../data/tracks'
 import TrackIcon from '../components/TrackIcon'
 import ProgressRing from '../components/ProgressRing'
 import { useProgress } from '../context/ProgressContext'
@@ -67,31 +67,38 @@ export default function Dashboard() {
       {/* Tracks */}
       <section className="mt-8">
         <h2 className="mb-4 text-lg font-bold">Learning Tracks</h2>
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {tracks.map((t) => {
-            const p = trackProgress(t.id, completed)
-            return (
-              <Link key={t.id} to={t.path} className="card group p-5 transition-all hover:-translate-y-0.5 hover:ring-1 hover:ring-brand-400/40">
-                <div className="flex items-start justify-between">
-                  <span className={`grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br ${t.color} text-white shadow-lg`}>
-                    <TrackIcon name={t.icon} size={22} />
-                  </span>
-                  <ArrowIcon size={18} className="text-slate-600 transition-all group-hover:translate-x-1 group-hover:text-brand-300" />
-                </div>
-                <h3 className="mt-4 font-bold">{t.title}</h3>
-                <p className="mt-1 text-sm text-slate-400">{t.blurb}</p>
-                <div className="mt-4">
-                  <div className="flex items-center justify-between text-xs text-slate-500">
-                    <span>{p.done}/{p.total} topics</span>
-                    <span className="font-semibold text-brand-300">{p.pct}%</span>
-                  </div>
-                  <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/10">
-                    <div className={`h-full rounded-full bg-gradient-to-r ${t.color} transition-all duration-700`} style={{ width: `${p.pct}%` }} />
-                  </div>
-                </div>
-              </Link>
-            )
-          })}
+        <div className="space-y-8">
+          {trackGroups.map((group) => (
+            <div key={group}>
+              <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">{group}</h3>
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {tracks.filter((t) => t.group === group).map((t) => {
+                  const p = trackProgress(t.id, completed)
+                  return (
+                    <Link key={t.id} to={t.path} className="card group p-5 transition-all hover:-translate-y-0.5 hover:ring-1 hover:ring-brand-400/40">
+                      <div className="flex items-start justify-between">
+                        <span className={`grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br ${t.color} text-white shadow-lg`}>
+                          <TrackIcon name={t.icon} size={22} />
+                        </span>
+                        <ArrowIcon size={18} className="text-slate-600 transition-all group-hover:translate-x-1 group-hover:text-brand-300" />
+                      </div>
+                      <h3 className="mt-4 font-bold">{t.title}</h3>
+                      <p className="mt-1 text-sm text-slate-400">{t.blurb}</p>
+                      <div className="mt-4">
+                        <div className="flex items-center justify-between text-xs text-slate-500">
+                          <span>{p.done}/{p.total} topics</span>
+                          <span className="font-semibold text-brand-300">{p.pct}%</span>
+                        </div>
+                        <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/10">
+                          <div className={`h-full rounded-full bg-gradient-to-r ${t.color} transition-all duration-700`} style={{ width: `${p.pct}%` }} />
+                        </div>
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 

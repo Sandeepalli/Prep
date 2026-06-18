@@ -48,6 +48,8 @@ export const sections = [
           'INP < 200ms: break up long tasks, defer work, avoid heavy main-thread JS.',
           'CLS < 0.1: reserve space for images/ads (width/height), avoid layout shifts.',
         ],
+        interviewer:
+          'Tie each metric to a cause AND a fix (LCP→hero image/preload, INP→long tasks, CLS→missing dimensions). Naming the field tool (CrUX/RUM vs lab/Lighthouse) is a bonus.',
       },
       {
         id: 'wp-loading',
@@ -61,6 +63,13 @@ export const sections = [
           'Use resource hints: preload (critical), prefetch (next nav), preconnect (origins).',
           'HTTP caching: immutable hashed assets + long max-age; revalidate HTML.',
         ],
+        code: `// Lazy-load below-the-fold work with IntersectionObserver
+const io = new IntersectionObserver((entries) => {
+  for (const e of entries) {
+    if (e.isIntersecting) { load(e.target); io.unobserve(e.target) }
+  }
+}, { rootMargin: '200px' })   // start a bit before it scrolls into view`,
+        codeLang: 'js',
       },
     ],
   },
@@ -109,6 +118,8 @@ export const sections = [
           'Keyboard operability, visible focus, logical tab order, focus traps for modals.',
           'Color contrast (WCAG AA), alt text, labels; test with a screen reader + axe.',
         ],
+        interviewer:
+          '"The first rule of ARIA is: don’t use ARIA" — if a native element exists, use it. Saying that signals real a11y depth, not checklist knowledge.',
       },
       {
         id: 'wp-security',
@@ -134,6 +145,83 @@ export const sections = [
           'Specificity + cascade; methodologies: BEM, CSS Modules, utility-first (Tailwind), CSS-in-JS.',
           'Logical properties, custom properties (theming), clamp() for fluid type.',
         ],
+      },
+    ],
+  },
+  {
+    id: 'wp-sec-a11y',
+    title: 'Accessibility Deep Dive',
+    items: [
+      {
+        id: 'wp-a11y-aria',
+        title: 'Roles, Names & ARIA',
+        tags: ['accessibility'],
+        summary:
+          'Assistive tech builds an accessibility tree of roles, names, states, and values. Native HTML provides these for free; ARIA only patches gaps — and wrong ARIA is worse than none.',
+        points: [
+          'Every interactive element needs an accessible NAME (label/aria-label/text).',
+          'ARIA changes semantics only — it adds no behavior, focus, or keyboard handling.',
+          'role="button" on a div means you must add tabindex + key handlers yourself.',
+        ],
+        code: `<!-- ✅ free role, name, focus, keyboard, Enter/Space -->
+<button onclick="save()">Save</button>
+
+<!-- ❌ now you owe tabindex + role + keydown + focus styles -->
+<div role="button" tabindex="0" onkeydown="...">Save</div>`,
+        codeLang: 'html',
+        gotcha:
+          'Adding role="button" to a div does NOT make it focusable or respond to Enter/Space — you must wire all of that manually. Just use <button>.',
+      },
+      {
+        id: 'wp-a11y-keyboard',
+        title: 'Keyboard & Focus Management',
+        tags: ['accessibility'],
+        summary:
+          'Everything must be operable by keyboard alone. Modals/menus need deliberate focus management: trap focus inside while open, then restore it to the trigger on close.',
+        points: [
+          'Logical tab order (DOM order); never remove visible focus outlines without a replacement.',
+          'Modal: move focus in on open, trap Tab within, Esc to close, restore focus on close.',
+          'Use tabindex="-1" to focus programmatically; avoid positive tabindex values.',
+        ],
+        code: `function openDialog(dialog, trigger) {
+  const last = trigger
+  dialog.querySelector('[autofocus], button, input')?.focus()
+  dialog.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { close(); last.focus() }   // restore focus
+  })
+}`,
+        codeLang: 'js',
+        interviewer:
+          'Focus restoration (returning focus to the trigger after a modal closes) is the detail that separates people who have actually built accessible widgets from those who have read about them.',
+      },
+      {
+        id: 'wp-a11y-sr',
+        title: 'Screen Readers & Live Regions',
+        tags: ['accessibility'],
+        summary:
+          'Dynamic updates (toasts, validation, async results) are invisible to screen-reader users unless announced. ARIA live regions broadcast changes without moving focus.',
+        points: [
+          'aria-live="polite" announces when idle; "assertive" interrupts (use sparingly).',
+          'role="status"/"alert" are built-in live regions for results and errors.',
+          'Test with a real screen reader (VoiceOver/NVDA) — automated tools miss a lot.',
+        ],
+        code: `<div role="status" aria-live="polite">{savedMessage}</div>
+// setting savedMessage = "Saved!" is announced without stealing focus`,
+        codeLang: 'jsx',
+      },
+      {
+        id: 'wp-a11y-forms',
+        title: 'Accessible Forms',
+        tags: ['accessibility'],
+        summary:
+          'Forms are where a11y most often breaks. Every input needs a programmatically associated label, and errors must be linked to their field and announced.',
+        points: [
+          'Associate labels via <label for> / htmlFor — placeholders are NOT labels.',
+          'Link errors with aria-describedby; mark invalid fields with aria-invalid.',
+          'Group related controls with <fieldset>/<legend> (radios, checkboxes).',
+        ],
+        gotcha:
+          'A placeholder is not a label — it disappears on input, fails contrast, and is unreliable for screen readers. Always provide a real <label>.',
       },
     ],
   },

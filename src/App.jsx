@@ -13,6 +13,8 @@ import * as javascript from './data/javascript'
 import * as react from './data/react'
 import * as webPlatform from './data/webPlatform'
 import * as nodejs from './data/nodejs'
+import * as stateManagement from './data/stateManagement'
+import * as testing from './data/testing'
 
 export default function App() {
   return (
@@ -35,6 +37,14 @@ export default function App() {
         <Route
           path="/nodejs"
           element={<ConceptTrackPage trackId="nodejs" sections={nodejs.sections} tips={nodejs.nodeTips} />}
+        />
+        <Route
+          path="/state-management"
+          element={<ConceptTrackPage trackId="state-management" sections={stateManagement.sections} tips={stateManagement.tips} />}
+        />
+        <Route
+          path="/testing"
+          element={<ConceptTrackPage trackId="testing" sections={testing.sections} tips={testing.tips} />}
         />
 
         <Route path="/system-design" element={<SystemDesignPage />} />

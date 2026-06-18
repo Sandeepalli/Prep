@@ -26,6 +26,16 @@ const tagColor = {
   lld: 'bg-indigo-500/15 text-indigo-300',
   databases: 'bg-cyan-500/15 text-cyan-300',
   distributed: 'bg-fuchsia-500/15 text-fuchsia-300',
+  'server-state': 'bg-emerald-500/15 text-emerald-300',
+  redux: 'bg-purple-500/15 text-purple-300',
+  concurrent: 'bg-cyan-500/15 text-cyan-300',
+  forms: 'bg-sky-500/15 text-sky-300',
+  ssr: 'bg-orange-500/15 text-orange-300',
+  effects: 'bg-fuchsia-500/15 text-fuchsia-300',
+  testing: 'bg-teal-500/15 text-teal-300',
+  e2e: 'bg-indigo-500/15 text-indigo-300',
+  tooling: 'bg-slate-500/20 text-slate-300',
+  middleware: 'bg-amber-500/15 text-amber-300',
 }
 
 export default function ConceptCard({ item, defaultOpen = false }) {
@@ -60,6 +70,13 @@ export default function ConceptCard({ item, defaultOpen = false }) {
             </div>
           )}
           {!open && <p className="mt-2 line-clamp-2 text-sm text-slate-400">{item.summary}</p>}
+          {!open && (item.code || item.gotcha || item.interviewer) && (
+            <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-slate-500">
+              {item.code && <span className="inline-flex items-center gap-1">{'</>'} code</span>}
+              {item.gotcha && <span className="inline-flex items-center gap-1">⚠️ gotcha</span>}
+              {item.interviewer && <span className="inline-flex items-center gap-1">🎯 interview</span>}
+            </div>
+          )}
         </button>
 
         <button
@@ -83,6 +100,34 @@ export default function ConceptCard({ item, defaultOpen = false }) {
                 </li>
               ))}
             </ul>
+          )}
+
+          {item.code && (
+            <div className="mt-4 overflow-hidden rounded-lg border border-white/10 bg-ink-900/80">
+              <div className="flex items-center justify-between border-b border-white/5 px-3 py-1.5">
+                <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
+                  {item.codeLang || 'example'}
+                </span>
+                <span className="text-slate-600">{'</>'}</span>
+              </div>
+              <pre className="overflow-x-auto p-3 text-[12.5px] leading-relaxed">
+                <code className="font-mono text-slate-200">{item.code.trim()}</code>
+              </pre>
+            </div>
+          )}
+
+          {item.gotcha && (
+            <div className="mt-4 flex gap-2.5 rounded-lg border border-amber-400/25 bg-amber-500/10 p-3 text-sm leading-relaxed text-amber-100/90">
+              <span aria-hidden className="select-none">⚠️</span>
+              <p><span className="font-semibold text-amber-200">Gotcha — </span>{item.gotcha}</p>
+            </div>
+          )}
+
+          {item.interviewer && (
+            <div className="mt-3 flex gap-2.5 rounded-lg border border-brand-400/25 bg-brand-500/10 p-3 text-sm leading-relaxed text-brand-100/90">
+              <span aria-hidden className="select-none">🎯</span>
+              <p><span className="font-semibold text-brand-200">What they're really asking — </span>{item.interviewer}</p>
+            </div>
           )}
         </div>
       )}

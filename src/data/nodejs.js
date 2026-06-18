@@ -44,6 +44,73 @@ export const sections = [
     ],
   },
   {
+    id: 'node-sec-middleware',
+    title: 'Middleware & Request Pipeline',
+    items: [
+      {
+        id: 'node-middleware-model',
+        title: 'The Middleware Model',
+        tags: ['middleware', 'architecture'],
+        summary:
+          'A web server processes each request through an ordered pipeline of middleware functions. Each can read/modify req+res, then call next() to pass control on — or short-circuit by responding. Order matters.',
+        points: [
+          'Express: (req, res, next) — call next() to continue, or res.send() to stop.',
+          'Cross-cutting concerns live here: logging, auth, parsing, CORS, compression.',
+          'Mount order = execution order; a misplaced middleware is a common bug.',
+        ],
+        code: `app.use(express.json())          // 1. parse body
+app.use(requestLogger)            // 2. log
+app.use('/api', authenticate)     // 3. guard /api
+app.get('/api/me', (req, res) => res.json(req.user))  // 4. handler`,
+        codeLang: 'js',
+        interviewer:
+          'Be ready to explain next(): calling it continues the chain, NOT calling it (without responding) hangs the request. This is the #1 middleware bug.',
+      },
+      {
+        id: 'node-middleware-onion',
+        title: 'Express Chain vs Koa Onion',
+        tags: ['middleware'],
+        summary:
+          'Express runs middleware as a linear chain. Koa uses an "onion" model with async/await: code before await next() runs on the way in, code after runs on the way out — ideal for timing and post-processing.',
+        points: [
+          'Express: callback-style next(); response logic after next() needs care.',
+          'Koa: await next() — wrap the downstream, then run code as the response bubbles out.',
+          'Onion model makes "measure total handler time" trivial.',
+        ],
+        code: `// Koa onion: runs on the way IN, awaits the rest, runs on the way OUT
+app.use(async (ctx, next) => {
+  const start = Date.now()
+  await next()                       // run all downstream middleware
+  ctx.set('X-Response-Time', \`\${Date.now() - start}ms\`)
+})`,
+        codeLang: 'js',
+      },
+      {
+        id: 'node-error-middleware',
+        title: 'Error-Handling Middleware',
+        tags: ['middleware', 'runtime'],
+        summary:
+          'Centralize error handling in one place instead of try/catch in every route. In Express, error middleware has four args (err, req, res, next) and must be registered last.',
+        points: [
+          'Forward errors with next(err); a 4-arg middleware catches them centrally.',
+          'Wrap async handlers so rejected promises reach the error handler.',
+          'Map error types → status codes; never leak stack traces to clients.',
+        ],
+        code: `const wrap = (fn) => (req, res, next) =>
+  Promise.resolve(fn(req, res, next)).catch(next)
+
+app.get('/x', wrap(async (req, res) => { /* may throw */ }))
+
+app.use((err, req, res, next) => {        // 4 args = error handler
+  res.status(err.status || 500).json({ error: err.message })
+})`,
+        codeLang: 'js',
+        gotcha:
+          'Express does not catch errors thrown in async handlers automatically — an unwrapped rejected promise bypasses your error middleware. Wrap async routes.',
+      },
+    ],
+  },
+  {
     id: 'node-sec-api',
     title: 'APIs & Architecture',
     items: [

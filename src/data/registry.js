@@ -5,6 +5,8 @@ import * as react from './react'
 import * as webPlatform from './webPlatform'
 import * as systemDesign from './systemDesign'
 import * as nodejs from './nodejs'
+import * as stateManagement from './stateManagement'
+import * as testing from './testing'
 import * as coding from './coding'
 import * as behavioral from './behavioral'
 
@@ -15,6 +17,8 @@ export const trackItemIds = {
   react: conceptIds(react),
   'web-platform': conceptIds(webPlatform),
   nodejs: conceptIds(nodejs),
+  'state-management': conceptIds(stateManagement),
+  testing: conceptIds(testing),
   'system-design': [
     ...systemDesign.fundamentals.map((i) => i.id),
     ...systemDesign.caseStudies.map((i) => i.id),

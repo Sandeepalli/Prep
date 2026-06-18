@@ -67,3 +67,12 @@ export const RefreshIcon = (p) => (
 export const SearchIcon = (p) => (
   <Icon path={<><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></>} {...p} />
 )
+export const LayersIcon = (p) => (
+  <Icon path={<><path d="m12 3 9 5-9 5-9-5 9-5z" /><path d="m3 13 9 5 9-5" /></>} {...p} />
+)
+export const BeakerIcon = (p) => (
+  <Icon path={<><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3" /><path d="M7.5 14h9" /></>} {...p} />
+)
+export const ChevronIcon = (p) => (
+  <Icon path={<><path d="m9 6 6 6-6 6" /></>} {...p} />
+)
