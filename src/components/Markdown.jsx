@@ -19,6 +19,7 @@ export function scrollToId(id) {
 // Pull out the "## " section headings for a table of contents.
 export function extractHeadings(source) {
   return source
+    .replace(/\r\n?/g, '\n')
     .split('\n')
     .filter((l) => l.startsWith('## '))
     .map((l) => {
@@ -41,14 +42,14 @@ function renderLinks(text, keyBase) {
         <button
           key={`${keyBase}-lnk-${n}`}
           onClick={() => scrollToId(href.slice(1))}
-          className="text-brand-300 hover:underline"
+          className="text-brand-600 hover:underline dark:text-brand-300"
         >
           {label}
         </button>
       )
     } else {
       out.push(
-        <a key={`${keyBase}-lnk-${n}`} href={href} target="_blank" rel="noopener noreferrer" className="text-brand-300 hover:underline">
+        <a key={`${keyBase}-lnk-${n}`} href={href} target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:underline dark:text-brand-300">
           {label}
         </a>
       )
@@ -67,7 +68,7 @@ function renderInline(text, keyBase) {
     if (!chunk) return
     if (chunk.startsWith('`') && chunk.endsWith('`')) {
       nodes.push(
-        <code key={`${keyBase}-c-${ci}`} className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[0.85em] text-brand-200">
+        <code key={`${keyBase}-c-${ci}`} className="rounded bg-slate-200 px-1.5 py-0.5 font-mono text-[0.85em] text-brand-700 dark:bg-white/10 dark:text-brand-200">
           {chunk.slice(1, -1)}
         </code>
       )
@@ -77,7 +78,7 @@ function renderInline(text, keyBase) {
       if (!seg) return
       if (seg.startsWith('**') && seg.endsWith('**')) {
         nodes.push(
-          <strong key={`${keyBase}-b-${ci}-${si}`} className="font-semibold text-slate-100">
+          <strong key={`${keyBase}-b-${ci}-${si}`} className="font-semibold text-slate-900 dark:text-slate-100">
             {seg.slice(2, -2)}
           </strong>
         )
@@ -90,7 +91,7 @@ function renderInline(text, keyBase) {
 }
 
 export default function Markdown({ source }) {
-  const lines = source.split('\n')
+  const lines = source.replace(/\r\n?/g, '\n').split('\n')
   const blocks = []
   let i = 0
   while (i < lines.length) {
@@ -131,7 +132,7 @@ export default function Markdown({ source }) {
             return <h1 key={idx} className="text-2xl font-extrabold tracking-tight sm:text-3xl">{renderInline(b.text, idx)}</h1>
           case 'h2':
             return (
-              <h2 key={idx} id={slugify(b.text)} className="scroll-mt-24 border-t border-white/10 pt-6 text-xl font-bold text-brand-300">
+              <h2 key={idx} id={slugify(b.text)} className="scroll-mt-24 border-t border-slate-200 pt-6 text-xl font-bold text-brand-700 dark:border-white/10 dark:text-brand-300">
                 {renderInline(b.text, idx)}
               </h2>
             )
@@ -141,7 +142,7 @@ export default function Markdown({ source }) {
             return null
           case 'quote':
             return (
-              <blockquote key={idx} className="rounded-lg border-l-2 border-brand-400/40 bg-white/5 px-4 py-3 text-sm text-slate-400">
+              <blockquote key={idx} className="rounded-lg border-l-2 border-brand-400/40 bg-slate-200/60 px-4 py-3 text-sm text-slate-600 dark:bg-white/5 dark:text-slate-400">
                 {b.items.map((l, j) => <p key={j}>{renderInline(l, `${idx}-${j}`)}</p>)}
               </blockquote>
             )
@@ -149,7 +150,7 @@ export default function Markdown({ source }) {
             return (
               <ul key={idx} className="space-y-1.5">
                 {b.items.map((it, j) => (
-                  <li key={j} className="flex gap-2 text-sm leading-relaxed text-slate-300">
+                  <li key={j} className="flex gap-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-400" />
                     <span>{renderInline(it, `${idx}-${j}`)}</span>
                   </li>
@@ -160,8 +161,8 @@ export default function Markdown({ source }) {
             return (
               <ol key={idx} className="space-y-1.5">
                 {b.items.map((it, j) => (
-                  <li key={j} className="flex gap-2 text-sm leading-relaxed text-slate-300">
-                    <span className="shrink-0 font-semibold text-brand-300">{j + 1}.</span>
+                  <li key={j} className="flex gap-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                    <span className="shrink-0 font-semibold text-brand-600 dark:text-brand-300">{j + 1}.</span>
                     <span>{renderInline(it, `${idx}-${j}`)}</span>
                   </li>
                 ))}
@@ -169,12 +170,12 @@ export default function Markdown({ source }) {
             )
           case 'question':
             return (
-              <h3 key={idx} className="pt-2 font-semibold leading-snug text-slate-100">
+              <h3 key={idx} className="pt-2 font-semibold leading-snug text-slate-900 dark:text-slate-100">
                 {renderInline(b.text, idx)}
               </h3>
             )
           default:
-            return <p key={idx} className="text-sm leading-relaxed text-slate-300">{renderInline(b.text, idx)}</p>
+            return <p key={idx} className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">{renderInline(b.text, idx)}</p>
         }
       })}
     </div>

@@ -79,9 +79,22 @@ function NavGroup({ title, tracks, defaultOpen, onNavigate }) {
   )
 }
 
+function ThemeToggle({ className = '' }) {
+  const { theme, toggle } = useTheme()
+  return (
+    <button
+      onClick={toggle}
+      aria-label="Toggle light/dark theme"
+      title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      className={`grid place-items-center rounded-lg p-2 text-slate-300 transition-colors hover:bg-white/10 ${className}`}
+    >
+      {theme === 'dark' ? <SunIcon size={18} /> : <MoonIcon size={18} />}
+    </button>
+  )
+}
+
 export default function Layout({ children }) {
   const [open, setOpen] = useState(false)
-  const { theme, toggle } = useTheme()
   const { completed } = useProgress()
   const overall = overallProgress(completed)
   const close = () => setOpen(false)
@@ -94,9 +107,12 @@ export default function Layout({ children }) {
           <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-500 text-white">P</span>
           PrepDeck
         </Link>
-        <button className="btn-ghost p-2" onClick={() => setOpen((o) => !o)} aria-label="Toggle menu">
-          {open ? <CloseIcon /> : <MenuIcon />}
-        </button>
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <button className="btn-ghost p-2" onClick={() => setOpen((o) => !o)} aria-label="Toggle menu">
+            {open ? <CloseIcon /> : <MenuIcon />}
+          </button>
+        </div>
       </div>
 
       <div className="mx-auto flex max-w-[1400px]">
@@ -106,9 +122,12 @@ export default function Layout({ children }) {
             open ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
-          <div className="hidden lg:flex items-center gap-2 px-2 pb-6 pt-2 text-xl font-extrabold">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-500 text-white">P</span>
-            PrepDeck
+          <div className="hidden lg:flex items-center justify-between px-2 pb-6 pt-2">
+            <div className="flex items-center gap-2 text-xl font-extrabold">
+              <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-500 text-white">P</span>
+              PrepDeck
+            </div>
+            <ThemeToggle />
           </div>
 
           <nav className="flex h-[calc(100%-4rem)] flex-col gap-1 overflow-y-auto pb-4">
@@ -142,10 +161,6 @@ export default function Layout({ children }) {
                 </div>
                 <p className="mt-1.5 text-[11px] text-slate-500">{overall.done} / {overall.total} topics done</p>
               </div>
-              <button onClick={toggle} className="btn-ghost w-full">
-                {theme === 'dark' ? <SunIcon size={16} /> : <MoonIcon size={16} />}
-                {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-              </button>
             </div>
           </nav>
         </aside>

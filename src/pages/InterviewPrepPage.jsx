@@ -16,7 +16,7 @@ export default function InterviewPrepPage() {
           </span>
           <div>
             <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Interview Q&amp;A</h1>
-            <p className="mt-1 max-w-2xl text-sm text-slate-400">
+            <p className="mt-1 max-w-2xl text-sm text-slate-500 dark:text-slate-400">
               ~200 questions with detailed answers across HTML/CSS, JS, TypeScript, React, Angular,
               state, architecture, performance, AI/RAG, testing/DevOps, and leadership scenarios.
             </p>
@@ -26,13 +26,13 @@ export default function InterviewPrepPage() {
 
       {/* Mobile jump-to */}
       <details className="card mb-6 p-4 lg:hidden">
-        <summary className="cursor-pointer text-sm font-semibold text-brand-300">Jump to section</summary>
+        <summary className="cursor-pointer text-sm font-semibold text-brand-600 dark:text-brand-300">Jump to section</summary>
         <div className="mt-3 grid gap-1">
           {headings.map((h) => (
             <button
               key={h.id}
               onClick={() => scrollToId(h.id)}
-              className="rounded-lg px-2 py-1.5 text-left text-sm text-slate-400 hover:bg-white/5 hover:text-slate-200"
+              className="rounded-lg px-2 py-1.5 text-left text-sm text-slate-600 hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-slate-200"
             >
               {h.text}
             </button>
@@ -55,7 +55,7 @@ export default function InterviewPrepPage() {
                 <button
                   key={h.id}
                   onClick={() => scrollToId(h.id)}
-                  className="block w-full truncate rounded-lg px-2 py-1.5 text-left text-sm text-slate-400 transition-colors hover:bg-white/5 hover:text-slate-200"
+                  className="block w-full truncate rounded-lg px-2 py-1.5 text-left text-sm text-slate-600 transition-colors hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-slate-200"
                   title={h.text}
                 >
                   {h.text}
