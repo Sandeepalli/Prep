@@ -6,11 +6,12 @@ import { useTheme } from '../context/ThemeContext'
 import { useProgress } from '../context/ProgressContext'
 import { overallProgress } from '../data/registry'
 import {
-  HomeIcon, CardsIcon, QuizIcon, PlayIcon, SunIcon, MoonIcon, MenuIcon, CloseIcon, ChevronIcon,
+  HomeIcon, CardsIcon, QuizIcon, PlayIcon, SunIcon, MoonIcon, MenuIcon, CloseIcon, ChevronIcon, BookIcon,
 } from './Icons'
 
 const navMain = [
   { to: '/', label: 'Dashboard', icon: HomeIcon, end: true },
+  { to: '/interview-qa', label: 'Interview Q&A', icon: BookIcon },
 ]
 const navTools = [
   { to: '/flashcards', label: 'Flashcards', icon: CardsIcon },

@@ -8,6 +8,7 @@ import BehavioralPage from './pages/BehavioralPage'
 import FlashcardsPage from './pages/FlashcardsPage'
 import QuizzesPage from './pages/QuizzesPage'
 import PlaygroundPage from './pages/PlaygroundPage'
+import InterviewPrepPage from './pages/InterviewPrepPage'
 
 import * as javascript from './data/javascript'
 import * as react from './data/react'
@@ -50,6 +51,8 @@ export default function App() {
         <Route path="/system-design" element={<SystemDesignPage />} />
         <Route path="/coding" element={<CodingPage />} />
         <Route path="/behavioral" element={<BehavioralPage />} />
+
+        <Route path="/interview-qa" element={<InterviewPrepPage />} />
 
         <Route path="/flashcards" element={<FlashcardsPage />} />
         <Route path="/quizzes" element={<QuizzesPage />} />

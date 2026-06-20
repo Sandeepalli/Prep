@@ -76,3 +76,6 @@ export const BeakerIcon = (p) => (
 export const ChevronIcon = (p) => (
   <Icon path={<><path d="m9 6 6 6-6 6" /></>} {...p} />
 )
+export const BookIcon = (p) => (
+  <Icon path={<><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5z" /><path d="M19 17H6a2 2 0 0 0-2 2" /></>} {...p} />
+)
